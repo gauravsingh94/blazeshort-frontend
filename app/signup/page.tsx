@@ -1,50 +1,62 @@
-'use client'
+"use client";
 
-import React from "react"
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
-import { ArrowRight } from 'lucide-react'
-import { AnimatedContainer } from '@/components/common/animated-container'
-import { BrandLogo } from '@/components/common/brand-logo'
-import { AuthCard, AuthHeader, ErrorMessage } from '@/components/common/auth-card'
-import { FormField } from '@/components/common/form-field'
-import { ButtonLoadingSpinner } from '@/components/common/loading-spinner'
+import { AnimatedContainer } from "@/components/common/animated-container";
+import {
+  AuthCard,
+  AuthHeader,
+  ErrorMessage,
+} from "@/components/common/auth-card";
+import { BrandLogo } from "@/components/common/brand-logo";
+import { FormField } from "@/components/common/form-field";
+import { ButtonLoadingSpinner } from "@/components/common/loading-spinner";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 export default function SignupPage() {
-  const router = useRouter()
-  const [formData, setFormData] = useState({ email: '', password: '', confirmPassword: '' })
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
-      return
+      setError("Passwords do not match");
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const result = await api.signup(formData.email, formData.password)
-      // setAuthToken(result.token)
-      // router.push('/dashboard')
+      const result = await api.signup(formData.email, formData.password);
+      router.push("/login");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Signup failed')
+      setError(err instanceof Error ? err.message : "Signup failed");
+      // @ts-ignore
+      if (err.message === "Username is already in use") {
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -59,7 +71,7 @@ export default function SignupPage() {
           <div className="mb-6 flex items-center justify-center">
             <BrandLogo href="/" />
           </div>
-          <AuthHeader 
+          <AuthHeader
             title="Create your account"
             subtitle="Start shortening URLs in seconds"
           />
@@ -120,7 +132,7 @@ export default function SignupPage() {
           </form>
 
           <div className="text-xs text-center text-muted-foreground">
-            By signing up, you agree to our{' '}
+            By signing up, you agree to our{" "}
             <a href="#" className="text-primary hover:text-primary/80">
               Terms of Service
             </a>
@@ -129,12 +141,15 @@ export default function SignupPage() {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary hover:text-primary/80 font-medium">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="text-primary hover:text-primary/80 font-medium"
+          >
             Sign in
           </Link>
         </div>
       </AnimatedContainer>
     </main>
-  )
+  );
 }
