@@ -29,8 +29,11 @@ export default function LoginPage() {
 
     try {
       const result = await api.login(email, password)
-      setAuthToken(result.token)
-      router.push('/dashboard')
+      console.log("Login Result:", result?.data.token)
+      if(result?.data.token) {
+        setAuthToken(result.data.token)
+        router.push('/dashboard')
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
