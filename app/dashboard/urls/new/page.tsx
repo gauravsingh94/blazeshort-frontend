@@ -5,7 +5,7 @@ import React from "react"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
+import { api, CreateUrlResponse } from '@/lib/api'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
@@ -14,13 +14,14 @@ import { FormField } from '@/components/common/form-field'
 import { ButtonLoadingSpinner } from '@/components/common/loading-spinner'
 import { CopyButton } from '@/components/common/copy-button'
 import { motion } from 'framer-motion'
+import { formatTime } from "@/lib/method"
 
 export default function NewUrlPage() {
   const router = useRouter()
   const [originalUrl, setOriginalUrl] = useState('')
   const [expiresAt, setExpiresAt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [createdUrl, setCreatedUrl] = useState<any>(null)
+  const [createdUrl, setCreatedUrl] = useState<CreateUrlResponse| null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,7 +34,13 @@ export default function NewUrlPage() {
     setIsLoading(true)
 
     try {
-      const result = await api.createUrl(originalUrl, expiresAt || undefined)
+      let formattedExpiresAt = ''
+      if (expiresAt) {
+      formattedExpiresAt = `${expiresAt}T18:30:00`
+      }
+      
+      const result = await api.createUrl(originalUrl, formattedExpiresAt)
+      console.log("Create URL Result:", result)
       setCreatedUrl(result)
       toast.success('URL shortened successfully!')
     } catch (err) {
@@ -73,10 +80,10 @@ export default function NewUrlPage() {
                 <label className="text-sm text-muted-foreground block mb-2">Your Short URL</label>
                 <div className="flex gap-2">
                   <code className="flex-1 bg-input px-4 py-3 rounded-lg font-mono text-primary flex items-center">
-                    {`blaze.io/${createdUrl.shortCode}`}
+                    {`http:localhost:8080/${createdUrl.shortCode}`}
                   </code>
                   <CopyButton
-                    text={`blaze.io/${createdUrl.shortCode}`}
+                    text={`http:localhost:8080/${createdUrl.shortCode}`}
                     variant="default"
                     className="bg-primary hover:bg-primary/90"
                   />
@@ -91,7 +98,7 @@ export default function NewUrlPage() {
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Created</p>
-                  <p className="font-mono text-sm">{createdUrl.createdAt}</p>
+                    <p className="font-mono text-sm">{formatTime(createdUrl.createdAt)}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Status</p>
@@ -103,10 +110,10 @@ export default function NewUrlPage() {
             </div>
 
             <div className="flex gap-4">
-              <Button className="flex-1 bg-primary hover:bg-primary/90">Share</Button>
+              {/* <Button className="flex-1 bg-primary hover:bg-primary/90">Share</Button> */}
               <Button
                 variant="outline"
-                className="flex-1 bg-transparent"
+                className="flex-1 bg-primary hover:bg-primary/90"
                 onClick={() => {
                   setCreatedUrl(null)
                   setOriginalUrl('')

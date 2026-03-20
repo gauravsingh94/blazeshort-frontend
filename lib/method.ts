@@ -1,5 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+export const formatTime = (isoString: string): string => {
+    const date = new Date(isoString);
+    return date.toLocaleString();
+};
+
 const getAuthToken = (): string | null => {
     return localStorage.getItem('auth_token');
 };

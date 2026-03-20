@@ -12,11 +12,21 @@ export type LoginResponse = {
   status: number;
 };
 
+export type CreateUrlResponse = {
+    createdAt: string;
+    expiresAt: string;
+    originalUrl: string;
+    shortCode: string;
+    status: string;
+};
+
 export const api = {
+
   signup: async (
     email: string,
     password: string,
   ): Promise<SignupResponse | null> => {
+    
     try {
       // @ts-ignore
       const response: SignupResponse = await post(routes.auth.signup, {
@@ -31,7 +41,6 @@ export const api = {
       throw new Error(error.response?.data?.message || 'Signup failed');
     }
   },
-
   login: async (
     email: string,
     password: string,
@@ -47,6 +56,21 @@ export const api = {
     } catch (error: any) {
       console.error("Login failed:", error.response?.data);
       throw new Error(error.response?.data?.message || 'Login failed');
+    }
+  },
+  createUrl: async (
+    originalUrl: string,
+    expiresAt: string,
+  ): Promise<CreateUrlResponse> => {
+    try {
+      const response = await post(routes.url.create, {
+        originalUrl,
+        expiresAt,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error("Create URL failed:", error.response?.data);
+      throw new Error(error.response?.data?.message || 'Create URL failed');
     }
   },
 };
