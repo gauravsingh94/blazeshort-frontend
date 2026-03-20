@@ -16,38 +16,38 @@ import { EmptyState } from '@/components/common/empty-state'
 export default function MyUrlsPage() {
   const { data: urls, isLoading, refetch } = useQuery({
     queryKey: ['my-urls'],
-    queryFn: () => api.getUrls(),
+    queryFn: () => api.getAllUrls(),
   })
 
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const handleCopy = (shortCode: string) => {
-    const fullUrl = `blaze.io/${shortCode}`
+    const fullUrl = `http:localhost:8080/${shortCode}`
     navigator.clipboard.writeText(fullUrl)
     setCopiedId(shortCode)
     toast.success('Copied to clipboard!')
     setTimeout(() => setCopiedId(null), 2000)
   }
 
-  const handleToggle = async (id: string, currentStatus: boolean) => {
-    try {
-      await api.toggleUrl(id, !currentStatus)
-      refetch()
-      toast.success(`URL ${!currentStatus ? 'enabled' : 'disabled'}`)
-    } catch {
-      toast.error('Failed to update URL')
-    }
-  }
+  // const handleToggle = async (id: string, currentStatus: boolean) => {
+  //   try {
+  //     await api.toggleUrl(id, !currentStatus)
+  //     refetch()
+  //     toast.success(`URL ${!currentStatus ? 'enabled' : 'disabled'}`)
+  //   } catch {
+  //     toast.error('Failed to update URL')
+  //   }
+  // }
 
-  const handleDelete = async (id: string) => {
-    try {
-      await api.deleteUrl(id)
-      refetch()
-      toast.success('URL deleted')
-    } catch {
-      toast.error('Failed to delete URL')
-    }
-  }
+  // const handleDelete = async (id: string) => {
+  //   try {
+  //     await api.deleteUrl(id)
+  //     refetch()
+  //     toast.success('URL deleted')
+  //   } catch {
+  //     toast.error('Failed to delete URL')
+  //   }
+  // }
 
   if (isLoading) {
     return (
@@ -78,13 +78,14 @@ export default function MyUrlsPage() {
       {/* URLs Table */}
       {urls && urls.length > 0 ? (
         <AnimatedContainer stagger staggerChildren={0.05} className="space-y-3">
+          {/* @ts-ignore */}
           {urls.map((url) => (
             <UrlCard
               key={url.id}
               url={url}
               onCopy={handleCopy}
-              onToggle={handleToggle}
-              onDelete={handleDelete}
+              // onToggle={handleToggle}
+              // onDelete={handleDelete}
               copiedId={copiedId}
             />
           ))}

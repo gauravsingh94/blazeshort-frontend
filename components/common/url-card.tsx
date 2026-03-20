@@ -1,17 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ShortUrl } from '@/lib/api'
+import { CreateUrlResponse } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Copy, Eye, Trash2, ToggleLeft as Toggle2 } from 'lucide-react'
 import Link from 'next/link'
 import { fadeInUpVariants } from './animated-container'
 
 interface UrlCardProps {
-  url: ShortUrl
+  url: CreateUrlResponse
   onCopy: (shortCode: string) => void
-  onToggle: (id: string, currentStatus: boolean) => void
-  onDelete: (id: string) => void
+  onToggle?: (id: string, currentStatus: boolean) => void
+  onDelete?: (id: string) => void
   copiedId?: string | null
 }
 
@@ -27,14 +27,14 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
             <code className="text-sm font-mono bg-primary/10 px-2 py-1 rounded text-primary flex-shrink-0">
               blaze.io/{url.shortCode}
             </code>
-            <span className={`text-xs px-2 py-1 rounded-full ${url.isActive ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
-              {url.isActive ? 'Active' : 'Inactive'}
-            </span>
+            {/* <span className={`text-xs px-2 py-1 rounded-full ${url.isActive ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+              {url.status? 'Active' : 'Inactive'}
+            </span> */}
           </div>
           <p className="text-sm text-muted-foreground truncate">{url.originalUrl}</p>
           <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-            <span>{url.clicks.toLocaleString()} clicks</span>
-            <span>{url.uniqueClicks.toLocaleString()} unique</span>
+            {/* <span>{url.clicks.toLocaleString()} clicks</span> */}
+            {/* <span>{url.uniqueClicks.toLocaleString()} unique</span> */}
             {url.expiresAt && <span>Expires: {url.expiresAt}</span>}
           </div>
         </div>
@@ -58,7 +58,7 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
           <Button
             size="sm"
             variant="outline"
-            onClick={() => onToggle(url.id, url.isActive)}
+            // onClick={() => onToggle(url.id, url.isActive)}
           >
             <Toggle2 className="w-4 h-4" />
           </Button>
@@ -66,7 +66,7 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
             size="sm"
             variant="outline"
             className="text-destructive bg-transparent"
-            onClick={() => onDelete(url.id)}
+            // onClick={() => onDelete(url.id)}
           >
             <Trash2 className="w-4 h-4" />
           </Button>

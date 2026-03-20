@@ -1,4 +1,4 @@
-import { post } from "./method";
+import { get, post } from "./method";
 import { routes } from "./routes";
 
 export type SignupResponse = {
@@ -13,20 +13,18 @@ export type LoginResponse = {
 };
 
 export type CreateUrlResponse = {
-    createdAt: string;
-    expiresAt: string;
-    originalUrl: string;
-    shortCode: string;
-    status: string;
+  createdAt: string;
+  expiresAt: string;
+  originalUrl: string;
+  shortCode: string;
+  status: string;
 };
 
 export const api = {
-
   signup: async (
     email: string,
     password: string,
   ): Promise<SignupResponse | null> => {
-    
     try {
       // @ts-ignore
       const response: SignupResponse = await post(routes.auth.signup, {
@@ -38,7 +36,7 @@ export const api = {
       return response;
     } catch (error: any) {
       console.error("Signup failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || 'Signup failed');
+      throw new Error(error.response?.data?.message || "Signup failed");
     }
   },
   login: async (
@@ -55,7 +53,7 @@ export const api = {
       return response;
     } catch (error: any) {
       console.error("Login failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || 'Login failed');
+      throw new Error(error.response?.data?.message || "Login failed");
     }
   },
   createUrl: async (
@@ -70,7 +68,13 @@ export const api = {
       return response.data;
     } catch (error: any) {
       console.error("Create URL failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || 'Create URL failed');
+      throw new Error(error.response?.data?.message || "Create URL failed");
     }
+  },
+  getAllUrls: async () => {
+    try {
+      const response = await get(routes.url.myUrls);
+      return response.data;
+    } catch (error: any) {}
   },
 };
