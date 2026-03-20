@@ -1,4 +1,4 @@
-import { get, post } from "./method";
+import { get, patch, post } from "./method";
 import { routes } from "./routes";
 
 export type SignupResponse = {
@@ -26,17 +26,16 @@ export const api = {
     password: string,
   ): Promise<SignupResponse | null> => {
     try {
-      // @ts-ignore
-      const response: SignupResponse = await post(routes.auth.signup, {
+      const response = await post(routes.auth.signup, {
         email,
         password,
         role: "USER",
       });
       console.log("Response:", response);
-      return response;
+      return response.data;
     } catch (error: any) {
       console.error("Signup failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Signup failed");
+      throw new Error(error.response?.data?.message || "Unable to create account. Please try again.");
     }
   },
   login: async (
@@ -44,16 +43,15 @@ export const api = {
     password: string,
   ): Promise<LoginResponse | null> => {
     try {
-      // @ts-ignore
-      const response: LoginResponse = await post(routes.auth.login, {
+      const response = await post(routes.auth.login, {
         email,
         password,
       });
       console.log("Login Response:", response);
-      return response;
+      return response.data;
     } catch (error: any) {
       console.error("Login failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Login failed");
+      throw new Error(error.response?.data?.message || "Authentication failed. Please check your credentials and try again.");
     }
   },
   createUrl: async (
@@ -68,13 +66,25 @@ export const api = {
       return response.data;
     } catch (error: any) {
       console.error("Create URL failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Create URL failed");
+      throw new Error(error.response?.data?.message || "Failed to create shortened URL. Please try again.");
     }
   },
   getAllUrls: async () => {
     try {
       const response = await get(routes.url.myUrls);
       return response.data;
-    } catch (error: any) {}
+    } catch (error: any) {
+      console.error("Failed to fetch URLs:", error.response?.data);
+      throw new Error("Unable to retrieve your URLs. Please try again.");
+    }
+  },
+  toggleUrl: async (id: string, status: "ENABLE" | "DISABLE") => {
+    try {
+      const response = await (status === "ENABLE" ? patch(routes.url.enable(id)) : patch(routes.url.disable(id)));
+      return response.data;
+    } catch (error: any) {
+      console.error("Toggle URL failed:", error.response?.data);
+      throw new Error(`Failed to ${status.toLowerCase()} URL. Please try again.`);
+    }
   },
 };

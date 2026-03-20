@@ -1,21 +1,27 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { CreateUrlResponse } from '@/lib/api'
-import { Button } from '@/components/ui/button'
-import { Copy, Eye, Trash2, ToggleLeft as Toggle2 } from 'lucide-react'
-import Link from 'next/link'
-import { fadeInUpVariants } from './animated-container'
+import { motion } from "framer-motion";
+import { CreateUrlResponse } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Copy, Eye, Trash2, ToggleLeft as Toggle2 } from "lucide-react";
+import Link from "next/link";
+import { fadeInUpVariants } from "./animated-container";
 
 interface UrlCardProps {
-  url: CreateUrlResponse
-  onCopy: (shortCode: string) => void
-  onToggle?: (id: string, currentStatus: boolean) => void
-  onDelete?: (id: string) => void
-  copiedId?: string | null
+  url: CreateUrlResponse;
+  onCopy: (shortCode: string) => void;
+  onToggle?: (id: string, currentStatus: boolean) => void;
+  onDelete?: (id: string) => void;
+  copiedId?: string | null;
 }
 
-export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardProps) {
+export function UrlCard({
+  url,
+  onCopy,
+  onToggle,
+  onDelete,
+  copiedId,
+}: UrlCardProps) {
   return (
     <motion.div
       variants={fadeInUpVariants}
@@ -27,11 +33,15 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
             <code className="text-sm font-mono bg-primary/10 px-2 py-1 rounded text-primary flex-shrink-0">
               blaze.io/{url.shortCode}
             </code>
-            {/* <span className={`text-xs px-2 py-1 rounded-full ${url.isActive ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
-              {url.status? 'Active' : 'Inactive'}
-            </span> */}
+            <span
+              className={`text-xs px-2 py-1 rounded-full ${url.status === "ACTIVE" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}
+            >
+              {url.status ? "Active" : "Disabled"}
+            </span>
           </div>
-          <p className="text-sm text-muted-foreground truncate">{url.originalUrl}</p>
+          <p className="text-sm text-muted-foreground truncate">
+            {url.originalUrl}
+          </p>
           <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
             {/* <span>{url.clicks.toLocaleString()} clicks</span> */}
             {/* <span>{url.uniqueClicks.toLocaleString()} unique</span> */}
@@ -47,10 +57,14 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
             onClick={() => onCopy(url.shortCode)}
           >
             <Copy className="w-4 h-4" />
-            {copiedId === url.shortCode ? 'Copied!' : 'Copy'}
+            {copiedId === url.shortCode ? "Copied!" : "Copy"}
           </Button>
           <Link href={`/dashboard/analytics/${url.shortCode}`}>
-            <Button size="sm" variant="outline" className="gap-2 bg-transparent">
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-2 bg-transparent"
+            >
               <Eye className="w-4 h-4" />
               View
             </Button>
@@ -73,17 +87,17 @@ export function UrlCard({ url, onCopy, onToggle, onDelete, copiedId }: UrlCardPr
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
 interface UrlAnalyticsCardProps {
   url: {
-    id: string
-    shortCode: string
-    originalUrl: string
-    clicks: number
-    uniqueClicks: number
-  }
+    id: string;
+    shortCode: string;
+    originalUrl: string;
+    clicks: number;
+    uniqueClicks: number;
+  };
 }
 
 export function UrlAnalyticsCard({ url }: UrlAnalyticsCardProps) {
@@ -96,23 +110,31 @@ export function UrlAnalyticsCard({ url }: UrlAnalyticsCardProps) {
         <code className="text-sm font-mono bg-primary/10 px-2 py-1 rounded text-primary">
           {url.shortCode}
         </code>
-        <p className="text-xs text-muted-foreground mt-2 truncate">{url.originalUrl}</p>
+        <p className="text-xs text-muted-foreground mt-2 truncate">
+          {url.originalUrl}
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-xs text-muted-foreground mb-1">Total Clicks</p>
-          <p className="text-2xl font-bold text-primary">{url.clicks.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-primary">
+            {url.clicks.toLocaleString()}
+          </p>
         </div>
         <div>
           <p className="text-xs text-muted-foreground mb-1">Unique</p>
-          <p className="text-2xl font-bold text-accent">{url.uniqueClicks.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-accent">
+            {url.uniqueClicks.toLocaleString()}
+          </p>
         </div>
       </div>
 
       <Link href={`/dashboard/analytics/${url.shortCode}`}>
-        <Button className="w-full bg-primary hover:bg-primary/90">View Details</Button>
+        <Button className="w-full bg-primary hover:bg-primary/90">
+          View Details
+        </Button>
       </Link>
     </motion.div>
-  )
+  );
 }

@@ -29,15 +29,15 @@ export default function MyUrlsPage() {
     setTimeout(() => setCopiedId(null), 2000)
   }
 
-  // const handleToggle = async (id: string, currentStatus: boolean) => {
-  //   try {
-  //     await api.toggleUrl(id, !currentStatus)
-  //     refetch()
-  //     toast.success(`URL ${!currentStatus ? 'enabled' : 'disabled'}`)
-  //   } catch {
-  //     toast.error('Failed to update URL')
-  //   }
-  // }
+  const handleToggle = async (id: string, currentStatus: boolean) => {
+    try {
+      await api.toggleUrl(id, !currentStatus)
+      refetch()
+      toast.success(`URL ${!currentStatus ? 'enabled' : 'disabled'}`)
+    } catch {
+      toast.error('Failed to update URL')
+    }
+  }
 
   // const handleDelete = async (id: string) => {
   //   try {
