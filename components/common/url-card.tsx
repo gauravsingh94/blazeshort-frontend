@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CreateUrlResponse } from "@/lib/api";
+import { CreateUrlResponse, ToggleStatus } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Copy, Eye, Trash2, ToggleLeft as Toggle2 } from "lucide-react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { fadeInUpVariants } from "./animated-container";
 interface UrlCardProps {
   url: CreateUrlResponse;
   onCopy: (shortCode: string) => void;
-  onToggle?: (id: string, currentStatus: boolean) => void;
+  onToggle: (id: string, currentStatus: ToggleStatus) => void;
   onDelete?: (id: string) => void;
   copiedId?: string | null;
 }
@@ -36,7 +36,7 @@ export function UrlCard({
             <span
               className={`text-xs px-2 py-1 rounded-full ${url.status === "ACTIVE" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}
             >
-              {url.status ? "Active" : "Disabled"}
+              {url.status === "ACTIVE" ? "Active" : "Disabled"}
             </span>
           </div>
           <p className="text-sm text-muted-foreground truncate">
@@ -72,7 +72,12 @@ export function UrlCard({
           <Button
             size="sm"
             variant="outline"
-            // onClick={() => onToggle(url.id, url.isActive)}
+            onClick={() =>
+              onToggle(
+                url.shortCode,
+                url.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
+              )
+            }
           >
             <Toggle2 className="w-4 h-4" />
           </Button>

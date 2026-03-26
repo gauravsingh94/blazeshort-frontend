@@ -4,11 +4,10 @@ import { routes } from "./routes";
 export type SignupResponse = {
   message: string;
 };
+export type ToggleStatus = "ACTIVE" | "DISABLED";
 
 export type LoginResponse = {
-  data: {
     token: string;
-  };
   status: number;
 };
 
@@ -17,7 +16,7 @@ export type CreateUrlResponse = {
   expiresAt: string;
   originalUrl: string;
   shortCode: string;
-  status: string;
+  status: ToggleStatus;
 };
 
 export const api = {
@@ -35,7 +34,10 @@ export const api = {
       return response.data;
     } catch (error: any) {
       console.error("Signup failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Unable to create account. Please try again.");
+      throw new Error(
+        error.response?.data?.message ||
+          "Unable to create account. Please try again.",
+      );
     }
   },
   login: async (
@@ -51,7 +53,10 @@ export const api = {
       return response.data;
     } catch (error: any) {
       console.error("Login failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Authentication failed. Please check your credentials and try again.");
+      throw new Error(
+        error.response?.data?.message ||
+          "Authentication failed. Please check your credentials and try again.",
+      );
     }
   },
   createUrl: async (
@@ -66,7 +71,10 @@ export const api = {
       return response.data;
     } catch (error: any) {
       console.error("Create URL failed:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Failed to create shortened URL. Please try again.");
+      throw new Error(
+        error.response?.data?.message ||
+          "Failed to create shortened URL. Please try again.",
+      );
     }
   },
   getAllUrls: async () => {
@@ -78,13 +86,17 @@ export const api = {
       throw new Error("Unable to retrieve your URLs. Please try again.");
     }
   },
-  toggleUrl: async (id: string, status: "ENABLE" | "DISABLE") => {
+  toggleUrl: async (id: string, status: ToggleStatus) => {
     try {
-      const response = await (status === "ENABLE" ? patch(routes.url.enable(id)) : patch(routes.url.disable(id)));
+      const response = await (status === "ACTIVE"
+        ? patch(routes.url.enable(id))
+        : patch(routes.url.disable(id)));
       return response.data;
     } catch (error: any) {
       console.error("Toggle URL failed:", error.response?.data);
-      throw new Error(`Failed to ${status.toLowerCase()} URL. Please try again.`);
+      throw new Error(
+        `Failed to ${status.toLowerCase()} URL. Please try again.`,
+      );
     }
   },
 };

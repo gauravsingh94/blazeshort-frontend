@@ -1,45 +1,50 @@
-'use client'
+"use client";
 
-import React from "react"
+import React from "react";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { api } from '@/lib/api'
-import { setAuthToken } from '@/lib/auth'
-import { ArrowRight } from 'lucide-react'
-import { AnimatedContainer } from '@/components/common/animated-container'
-import { BrandLogo } from '@/components/common/brand-logo'
-import { AuthCard, AuthHeader, ErrorMessage } from '@/components/common/auth-card'
-import { FormField } from '@/components/common/form-field'
-import { ButtonLoadingSpinner } from '@/components/common/loading-spinner'
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
+import { setAuthToken } from "@/lib/auth";
+import { ArrowRight } from "lucide-react";
+import { AnimatedContainer } from "@/components/common/animated-container";
+import { BrandLogo } from "@/components/common/brand-logo";
+import {
+  AuthCard,
+  AuthHeader,
+  ErrorMessage,
+} from "@/components/common/auth-card";
+import { FormField } from "@/components/common/form-field";
+import { ButtonLoadingSpinner } from "@/components/common/loading-spinner";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoading(true)
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
     try {
-      const result = await api.login(email, password)
-      console.log("Login Result:", result?.data.token)
-      if(result?.data.token) {
-        setAuthToken(result.data.token)
-        router.push('/dashboard')
+      const result = await api.login(email, password);
+      console.log("Reaching here");
+      console.log("Login Result:", result?.token);
+      if (result?.token) {
+        setAuthToken(result.token);
+        router.push("/dashboard");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed')
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -54,7 +59,7 @@ export default function LoginPage() {
           <div className="mb-6 flex items-center justify-center">
             <BrandLogo href="/" />
           </div>
-          <AuthHeader 
+          <AuthHeader
             title="Welcome back"
             subtitle="Sign in to your account to continue"
           />
@@ -105,7 +110,9 @@ export default function LoginPage() {
               <div className="w-full border-t border-border/30" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-card text-muted-foreground">Or continue with demo</span>
+              <span className="px-2 bg-card text-muted-foreground">
+                Or continue with demo
+              </span>
             </div>
           </div>
 
@@ -114,8 +121,8 @@ export default function LoginPage() {
             variant="outline"
             className="w-full bg-transparent"
             onClick={() => {
-              setEmail('demo@blazeshort.com')
-              setPassword('password123')
+              setEmail("demo@blazeshort.com");
+              setPassword("password123");
             }}
           >
             Use Demo Account
@@ -124,12 +131,15 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-primary hover:text-primary/80 font-medium">
+          Don't have an account?{" "}
+          <Link
+            href="/signup"
+            className="text-primary hover:text-primary/80 font-medium"
+          >
             Sign up
           </Link>
         </div>
       </AnimatedContainer>
     </main>
-  )
+  );
 }

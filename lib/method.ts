@@ -43,8 +43,6 @@ export const del = async (route: string) => {
 };
 
 export const patch = async (route: string, body?: any) => {
-    const config: AxiosRequestConfig = {
-        headers: getHeaders(),
-    };
-    return body ? axios.patch(route, body, config) : axios.patch(route, config);
+    const config: AxiosRequestConfig = { headers: getHeaders() };
+    return axios.patch(route, body ?? undefined, config);
 };
