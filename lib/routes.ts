@@ -11,6 +11,7 @@ export const routes = {
     disable: (id: string) => `${BASE_URL}/api/urls/${id}/disable`,
     enable: (id: string) => `${BASE_URL}/api/urls/${id}/enable`,
     redirectUrl: (code: string) => `${BASE_URL}/${code}`,
+    deleteUrl:(code:string) => `${BASE_URL}/api/urls/${code}`,
   },
   dashboard: {
     analytics: `${BASE_URL}/api/dashboard/analytics`,

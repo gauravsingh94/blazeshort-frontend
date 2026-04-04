@@ -45,15 +45,15 @@ export default function MyUrlsPage() {
     }
   };
 
-  // const handleDelete = async (id: string) => {
-  //   try {
-  //     await api.deleteUrl(id)
-  //     refetch()
-  //     toast.success('URL deleted')
-  //   } catch {
-  //     toast.error('Failed to delete URL')
-  //   }
-  // }
+  const handleDelete = async (id: string) => {
+    try {
+      await api.deleteUrl(id)
+      refetch()
+      toast.success('URL deleted')
+    } catch {
+      toast.error('Failed to delete URL')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -91,7 +91,7 @@ export default function MyUrlsPage() {
               url={url}
               onCopy={handleCopy}
               onToggle={handleToggle}
-              // onDelete={handleDelete}
+              onDelete={handleDelete}
               copiedId={copiedId}
             />
           ))}

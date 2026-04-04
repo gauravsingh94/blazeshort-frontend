@@ -11,7 +11,7 @@ interface UrlCardProps {
   url: CreateUrlResponse;
   onCopy: (shortCode: string) => void;
   onToggle: (id: string, currentStatus: ToggleStatus) => void;
-  onDelete?: (id: string) => void;
+  onDelete: (id: string) => void;
   copiedId?: string | null;
 }
 
@@ -85,7 +85,7 @@ export function UrlCard({
             size="sm"
             variant="outline"
             className="text-destructive bg-transparent"
-            // onClick={() => onDelete(url.id)}
+            onClick={() => onDelete(url.shortCode)}
           >
             <Trash2 className="w-4 h-4" />
           </Button>

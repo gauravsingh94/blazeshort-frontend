@@ -1,4 +1,4 @@
-import { get, patch, post } from "./method";
+import {del, get, patch, post} from "./method";
 import { routes } from "./routes";
 
 export type SignupResponse = {
@@ -99,4 +99,15 @@ export const api = {
       );
     }
   },
+  deleteUrl: async (code: string) => {
+    try{
+     const response = await del(routes.url.deleteUrl(code));
+     return response.data;
+    } catch(error:any) {
+      console.error("Delete URL failed:", error.response?.data);
+      throw new Error(
+          `Failed to Delete URL. Please try again.`,
+      );
+    }
+  }
 };
