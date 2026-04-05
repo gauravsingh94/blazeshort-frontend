@@ -14,6 +14,6 @@ export const routes = {
     deleteUrl:(code:string) => `${BASE_URL}/api/urls/${code}`,
   },
   dashboard: {
-    analytics: `${BASE_URL}/api/dashboard/analytics`,
+    analytics:(code:string)=> `${BASE_URL}/api/dashboard/analytics/${code}`,
   },
 };
