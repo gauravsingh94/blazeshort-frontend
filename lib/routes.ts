@@ -15,5 +15,6 @@ export const routes = {
   },
   dashboard: {
     analytics:(code:string)=> `${BASE_URL}/api/dashboard/analytics/${code}`,
+    overall: `${BASE_URL}/api/dashboard/overall`,
   },
 };

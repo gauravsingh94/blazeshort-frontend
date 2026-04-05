@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, Children, isValidElement } from 'react'
 import { ResponsiveContainer } from 'recharts'
 import { FadeInUp } from './animated-container'
 
@@ -11,11 +11,13 @@ interface ChartContainerProps {
 }
 
 export function ChartContainer({ title, children, className = '' }: ChartContainerProps) {
+  const validChildren = Children.toArray(children).filter(isValidElement)
+  
   return (
     <FadeInUp className={`p-6 rounded-xl border border-border/50 bg-card/50 ${className}`}>
       <h3 className="font-semibold text-lg mb-4">{title}</h3>
       <ResponsiveContainer width="100%" height={300}>
-        <>{children}</>
+        <>{validChildren}</>
       </ResponsiveContainer>
     </FadeInUp>
   )

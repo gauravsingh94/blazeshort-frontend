@@ -120,5 +120,17 @@ export const api = {
           `Failed to Delete URL. Please try again.`,
       );
     }
+  },
+  getOverAllDashboardStats: async()=>{
+    try{
+      const response = await get(routes.dashboard.overall);
+      console.log("overall resonse: ",response);
+      return response.data;
+    } catch(error:any) {
+      console.error("Delete URL failed:", error.response?.data);
+      throw new Error(
+          `Failed to Delete URL. Please try again.`,
+      );
+    }
   }
 };

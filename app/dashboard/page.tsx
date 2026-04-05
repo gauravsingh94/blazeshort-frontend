@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api"
 import {
     LineChart,
     Line,
@@ -12,50 +12,46 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-} from 'recharts'
-import { Skeleton } from '@/components/ui/skeleton'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Plus, Globe, Monitor, Smartphone } from 'lucide-react'
-import { AnimatedContainer } from '@/components/common/animated-container'
-import { PageHeader } from '@/components/common/page-header'
-import { StatCard } from '@/components/common/stat-card'
+} from "recharts"
+import { Skeleton } from "@/components/ui/skeleton"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Plus, Globe, Monitor, Smartphone } from "lucide-react"
+import { AnimatedContainer } from "@/components/common/animated-container"
+import { PageHeader } from "@/components/common/page-header"
+import { StatCard } from "@/components/common/stat-card"
 import {
     ChartContainer,
     chartTooltipStyle,
     chartTooltipStyleAccent,
-    chartGridStyle,
-    chartGridStyleAccent,
     chartAxisStyle,
-} from '@/components/common/chart-container'
-import { motion } from 'framer-motion'
+} from "@/components/common/chart-container"
+import { motion } from "framer-motion"
 
 export default function DashboardPage() {
-    const shortCode = '920f273f'
-
     const { data: stats, isLoading } = useQuery({
-        queryKey: ['dashboard-stats'],
-        queryFn: () => api.getDashboardStats(shortCode),
+        queryKey: ["overall-dashboard-stats"],
+        queryFn: () => api.getOverAllDashboardStats(),
         refetchInterval: 30000,
     })
 
-    // 🔥 Parse user agent → browser + device
+    // 🔥 Parse user agent
     const parseUserAgent = (ua: string) => {
         const browser =
-            ua.includes('Chrome')
-                ? 'Chrome'
-                : ua.includes('Firefox')
-                    ? 'Firefox'
-                    : ua.includes('Safari')
-                        ? 'Safari'
-                        : 'Other'
+            ua.includes("Chrome")
+                ? "Chrome"
+                : ua.includes("Firefox")
+                    ? "Firefox"
+                    : ua.includes("Safari")
+                        ? "Safari"
+                        : "Other"
 
-        const device = ua.includes('Mobile') ? 'Mobile' : 'Desktop'
+        const device = ua.includes("Mobile") ? "Mobile" : "Desktop"
 
         return { browser, device }
     }
 
-    // 🔥 Transform data for clean SaaS UI
+    // 🔥 Browser Data
     const browserData =
         stats?.topUserAgents?.map((item: any) => {
             const parsed = parseUserAgent(item.userAgent)
@@ -82,11 +78,12 @@ export default function DashboardPage() {
         )
     }
 
+    // 🔥 Stats Cards
     const statCards = [
-        { label: 'Total Clicks', value: stats?.totalClicks || 0, icon: '📊' },
-        { label: 'Unique Clicks', value: stats?.uniqueClicks || 0, icon: '👥' },
-        { label: 'Top IPs', value: stats?.topIps?.length || 0, icon: '🌐' },
-        { label: 'Browsers', value: browserData.length || 0, icon: '🖥️' },
+        { label: "Total Clicks", value: stats?.totalClicks || 0, icon: "📊" },
+        { label: "Unique Clicks", value: stats?.uniqueClicks || 0, icon: "👥" },
+        { label: "Total URLs", value: stats?.totalUrls || 0, icon: "🔗" },
+        { label: "Active URLs", value: stats?.activeUrls || 0, icon: "✅" },
     ]
 
     return (
@@ -111,7 +108,12 @@ export default function DashboardPage() {
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
                 {statCards.map((stat, i) => (
-                    <StatCard key={i} label={stat.label} value={stat.value} icon={stat.icon} />
+                    <StatCard
+                        key={i}
+                        label={stat.label}
+                        value={stat.value}
+                        icon={stat.icon}
+                    />
                 ))}
             </AnimatedContainer>
 
@@ -121,7 +123,7 @@ export default function DashboardPage() {
                 staggerChildren={0.1}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
-                {/* 📈 SaaS Line Chart */}
+                {/* 📈 Line Chart */}
                 <ChartContainer title="Daily Clicks">
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={stats?.clicksPerDay || []}>
@@ -141,7 +143,7 @@ export default function DashboardPage() {
                     </ResponsiveContainer>
                 </ChartContainer>
 
-                {/* 📊 SaaS Bar Chart */}
+                {/* 📊 Bar Chart */}
                 <ChartContainer title="Top Browsers">
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={browserData}>
@@ -149,13 +151,17 @@ export default function DashboardPage() {
                             <XAxis dataKey="name" {...chartAxisStyle} />
                             <YAxis {...chartAxisStyle} />
                             <Tooltip {...chartTooltipStyleAccent} />
-                            <Bar dataKey="count" radius={[8, 8, 0, 0]} fill="#06b6d4" />
+                            <Bar
+                                dataKey="count"
+                                radius={[8, 8, 0, 0]}
+                                fill="#06b6d4"
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </ChartContainer>
             </AnimatedContainer>
 
-            {/* 🔥 Recent Activity with Icons */}
+            {/* 🔥 Recent Activity */}
             <AnimatedContainer className="p-6 rounded-xl border border-border/50 bg-card/50">
                 <h3 className="font-semibold text-lg mb-4">Recent Activity</h3>
                 <div className="space-y-3">
@@ -171,14 +177,16 @@ export default function DashboardPage() {
                                 className="flex items-center justify-between p-3 rounded-lg border border-border/30 hover:border-primary/30 transition"
                             >
                                 <div className="flex items-center gap-3">
-                                    {parsed.device === 'Mobile' ? (
+                                    {parsed.device === "Mobile" ? (
                                         <Smartphone className="w-5 h-5 text-primary" />
                                     ) : (
                                         <Monitor className="w-5 h-5 text-primary" />
                                     )}
 
                                     <div>
-                                        <p className="text-sm font-medium">{parsed.browser}</p>
+                                        <p className="text-sm font-medium">
+                                            {parsed.browser}
+                                        </p>
                                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                                             <Globe className="w-3 h-3" />
                                             {click.ip}
