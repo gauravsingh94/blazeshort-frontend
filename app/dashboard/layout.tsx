@@ -56,8 +56,8 @@ export default function DashboardLayout({
         className="w-64 border-r border-border/20 bg-card/50 backdrop-blur p-6 flex flex-col"
       >
         <Link href="/dashboard" className="mb-8 flex items-center gap-2">
-          <Image src="/logo.jpg" alt="BlazeShort" width={40} height={40} className="rounded-lg" loading="eager" />
-          <span className="text-2xl font-bold gradient-primary bg-clip-text text-transparent">BlazeShort</span>
+          <Image src="/logo.png" alt="BlazeShort" width={120} height={100} className="rounded-lg" loading="eager" />
+          {/*<span className="text-2xl font-bold gradient-primary bg-clip-text text-transparent">BlazeShort</span>*/}
         </Link>
 
         <nav className="space-y-2 flex-1">
