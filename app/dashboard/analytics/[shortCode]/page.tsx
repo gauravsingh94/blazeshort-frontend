@@ -35,7 +35,7 @@ export default function Page({params,}: {params: Promise<{ shortCode: string }>;
   console.log(shortCode);
 
   const {data: stats, isLoading} = useQuery({
-    queryKey: ['dashboard-stats'],
+    queryKey: ['dashboard-stats',shortCode],
     queryFn: () => api.getDashboardStats(shortCode),
     refetchInterval: 30000,
   })

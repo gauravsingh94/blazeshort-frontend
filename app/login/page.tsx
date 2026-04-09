@@ -109,24 +109,24 @@ export default function LoginPage() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-border/30" />
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-card text-muted-foreground">
-                Or continue with demo
-              </span>
-            </div>
+            {/*<div className="relative flex justify-center text-sm">*/}
+            {/*  <span className="px-2 bg-card text-muted-foreground">*/}
+            {/*    Or continue with demo*/}
+            {/*  </span>*/}
+            {/*</div>*/}
           </div>
 
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full bg-transparent"
-            onClick={() => {
-              setEmail("demo@blazeshort.com");
-              setPassword("password123");
-            }}
-          >
-            Use Demo Account
-          </Button>
+          {/*<Button*/}
+          {/*  type="button"*/}
+          {/*  variant="outline"*/}
+          {/*  className="w-full bg-transparent"*/}
+          {/*  onClick={() => {*/}
+          {/*    setEmail("demo@blazeshort.com");*/}
+          {/*    setPassword("password123");*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  Use Demo Account*/}
+          {/*</Button>*/}
         </AuthCard>
 
         {/* Footer */}

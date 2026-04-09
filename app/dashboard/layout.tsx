@@ -63,7 +63,7 @@ export default function DashboardLayout({
         <nav className="space-y-2 flex-1">
           <NavLink href="/dashboard" icon={Home} label="Dashboard" />
           <NavLink href="/dashboard/urls" icon={LinkIcon} label="My URLs" />
-          <NavLink href="/dashboard/analytics" icon={BarChart3} label="Analytics" />
+          {/*<NavLink href="/dashboard/analytics" icon={BarChart3} label="Analytics" />*/}
         </nav>
 
         <Button onClick={handleLogout} variant="outline" className="w-full justify-start gap-2 bg-transparent">
